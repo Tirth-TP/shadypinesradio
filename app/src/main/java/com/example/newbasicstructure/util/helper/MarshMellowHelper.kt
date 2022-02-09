@@ -14,7 +14,7 @@ import java.util.*
  * Created by Jeetesh Surana.
  */
 @Suppress("UNCHECKED_CAST")
-class PermissionHelper(activity: Activity, permissions: Array<String>, requestCode: Int) {
+class MarshMellowHelper(activity: Activity, permissions: Array<String>, requestCode: Int) {
 
     private var requestCode: Int? = requestCode
     private var activity: Activity? = activity
