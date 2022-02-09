@@ -41,13 +41,13 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btn_audio"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/btn_camera"
+            app:layout_constraintStart_toEndOf="@id/btn_camera"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias=".2" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_audio"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/dp_0"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dp_10"
             android:background="@drawable/shape_btn"

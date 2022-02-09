@@ -8,23 +8,33 @@ import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.newbasicstructure.R
-import java.util.*
 
 /**
  * Created by Jeetesh Surana.
  */
 @Suppress("UNCHECKED_CAST")
-class MarshMellowHelper(activity: Activity, permissions: Array<String>, requestCode: Int) {
+class MarshMellowHelper {
 
-    private var requestCode: Int? = requestCode
-    private var activity: Activity? = activity
+
+    private var requestCode: Int? = null
+    private var activity: Activity? = null
     private var fragment: Fragment? = null
-    private var permissions: Array<String>? = permissions
+    private var permissions: Array<String>? = null
     private var mPermissionCallback: PermissionCallback? = null
     private var showRational: Boolean = false
     private var mContext: Context? = null
 
-    init {
+    constructor(activity: Activity, permissions: Array<String>, requestCode: Int) {
+        this.activity = activity
+        this.permissions = permissions
+        this.requestCode = requestCode
+        mContext = getContext()
+    }
+
+    constructor(fragment: Fragment, permissions: Array<String>, requestCode: Int) {
+        this.fragment = fragment
+        this.permissions = permissions
+        this.requestCode = requestCode
         mContext = getContext()
     }
 
@@ -33,17 +43,24 @@ class MarshMellowHelper(activity: Activity, permissions: Array<String>, requestC
         if (!checkSelfPermission(permissions!!)) {
             showRational = shouldShowRational(permissions!!)
             if (activity != null) requestCode?.let {
-                ActivityCompat.requestPermissions(activity!!, filterNotGrantedPermission(permissions!!), it)
+                ActivityCompat.requestPermissions(
+                    activity!!,
+                    filterNotGrantedPermission(permissions!!),
+                    it
+                )
             }
             else requestCode?.let {
-                fragment!!.requestPermissions(filterNotGrantedPermission(permissions!!), it)
+                fragment!!.requestPermissions(
+                    filterNotGrantedPermission(permissions!!),
+                    it
+                )
             }
         } else {
             if (mPermissionCallback != null) mPermissionCallback!!.onPermissionGranted()
         }
     }
 
-    fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         if (requestCode == this.requestCode) {
             var denied = false
             for (grantResult in grantResults) {
@@ -55,11 +72,17 @@ class MarshMellowHelper(activity: Activity, permissions: Array<String>, requestC
             if (denied) {
                 val currentShowRational = shouldShowRational(permissions)
                 if (!showRational && !currentShowRational) {
-                    if (mPermissionCallback != null) mPermissionCallback!!.onPermissionDeniedBySystem(mContext!!.getString(
-                        R.string.permission_denied_by_system))
+                    if (mPermissionCallback != null) mPermissionCallback!!.onPermissionDeniedBySystem(
+                        mContext!!.getString(
+                            R.string.permission_denied_by_system
+                        )
+                    )
                 } else {
-                    if (mPermissionCallback != null) mPermissionCallback!!.onPermissionDenied(mContext!!.getString(
-                        R.string.permission_denied))
+                    if (mPermissionCallback != null) mPermissionCallback!!.onPermissionDenied(
+                        mContext!!.getString(
+                            R.string.permission_denied
+                        )
+                    )
                 }
             } else {
                 if (mPermissionCallback != null) mPermissionCallback!!.onPermissionGranted()
@@ -93,7 +116,7 @@ class MarshMellowHelper(activity: Activity, permissions: Array<String>, requestC
      * @param permissions
      * @return
      */
-    fun checkSelfPermission(permissions: Array<String>): Boolean {
+    private fun checkSelfPermission(permissions: Array<String>): Boolean {
         for (permission in permissions) {
             if (ContextCompat.checkSelfPermission(getContext(), permission) != PackageManager.PERMISSION_GRANTED) {
                 return false
@@ -108,7 +131,7 @@ class MarshMellowHelper(activity: Activity, permissions: Array<String>, requestC
      * @param permissions
      * @return
      */
-    private fun shouldShowRational(permissions: Array<out String>): Boolean {
+    private fun shouldShowRational(permissions: Array<String>): Boolean {
         var currentShowRational = false
         for (permission in permissions) {
 

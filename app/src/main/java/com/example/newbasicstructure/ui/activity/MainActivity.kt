@@ -7,9 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.newbasicstructure.core.uI.BaseActivity
 import com.example.newbasicstructure.databinding.ActivityMainBinding
 import com.example.newbasicstructure.util.RequestCodeUtil
-import com.example.newbasicstructure.util.extensionFunction.CheckPermission
-import com.example.newbasicstructure.util.extensionFunction.cameraWithStoragePermission
-import com.example.newbasicstructure.util.extensionFunction.checkPermission
+import com.example.newbasicstructure.util.extensionFunction.*
 import com.example.newbasicstructure.util.helper.MarshMellowHelper
 import com.example.newbasicstructure.viewmodel.DemoViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,14 +39,14 @@ class MainActivity : BaseActivity() {
                 }
                 it.btnAudio.setOnClickListener {
                     if (!checkPermission(this@MainActivity, CheckPermission.AUDIO)) {
-                        initCameraRequestPermission()
+                        initAudioRequestPermission()
                     } else {
                         openAudio()
                     }
                 }
                 it.btnGallery.setOnClickListener {
                     if (!checkPermission(this@MainActivity, CheckPermission.STORAGE)) {
-                        initCameraRequestPermission()
+                        initStorageRequestPermission()
                     } else {
                         openGallery()
                     }
@@ -58,15 +56,15 @@ class MainActivity : BaseActivity() {
     }
 
     private fun openGallery() {
-
+        Toast.makeText(this, "open gallery", Toast.LENGTH_SHORT).show()
     }
 
     private fun openAudio() {
-
+        Toast.makeText(this, "open audio", Toast.LENGTH_SHORT).show()
     }
 
     private fun openCamera() {
-
+        Toast.makeText(this, "open camera", Toast.LENGTH_SHORT).show()
     }
 
     private fun initCameraRequestPermission() {
@@ -84,9 +82,59 @@ class MainActivity : BaseActivity() {
             }
 
             override fun onPermissionDeniedBySystem(permissionDeniedBySystem: String) {
-                Toast.makeText(this@MainActivity, permissionDeniedBySystem, Toast.LENGTH_SHORT)
-                    .show();
+                Toast.makeText(this@MainActivity, permissionDeniedBySystem, Toast.LENGTH_SHORT).show()
             }
         })
+
+    }
+
+    private fun initAudioRequestPermission() {
+        marshMellowHelper = MarshMellowHelper(
+            this, audioCameraStoragePermission,
+            RequestCodeUtil.PERMISSIONS_AUDIO_CAMERA_GALLERY_REQUEST_CODE
+        )
+        marshMellowHelper!!.request(object : MarshMellowHelper.PermissionCallback {
+            override fun onPermissionGranted() {
+                openAudio()
+            }
+
+            override fun onPermissionDenied(permissionDeniedError: String) {
+                Toast.makeText(this@MainActivity, permissionDeniedError, Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onPermissionDeniedBySystem(permissionDeniedBySystem: String) {
+                Toast.makeText(this@MainActivity, permissionDeniedBySystem, Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+
+    private fun initStorageRequestPermission() {
+        marshMellowHelper = MarshMellowHelper(
+            this, storagePermission,
+            RequestCodeUtil.PERMISSIONS_STORAGE_REQUEST_CODE
+        )
+        marshMellowHelper!!.request(object : MarshMellowHelper.PermissionCallback {
+            override fun onPermissionGranted() {
+                openGallery()
+            }
+
+            override fun onPermissionDenied(permissionDeniedError: String) {
+                Toast.makeText(this@MainActivity, permissionDeniedError, Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onPermissionDeniedBySystem(permissionDeniedBySystem: String) {
+                Toast.makeText(this@MainActivity, permissionDeniedBySystem, Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        marshMellowHelper?.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 }
