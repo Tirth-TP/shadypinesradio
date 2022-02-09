@@ -7,7 +7,7 @@ import com.example.newbasicstructure.BuildConfig
 import com.example.newbasicstructure.network.HttpConstants.KEY_DEVICE_ID
 
 /**
- * Created by Abhin.
+ * Created by Jeetesh Surana.
  */
 @SuppressLint("HardwareIds")
 class DeviceUtil(context: Context, private val preferenceProvider: PreferenceProvider) {

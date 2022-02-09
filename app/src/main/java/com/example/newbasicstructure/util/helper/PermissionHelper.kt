@@ -11,7 +11,7 @@ import com.example.newbasicstructure.R
 import java.util.*
 
 /**
- * Created by Sajid.
+ * Created by Jeetesh Surana.
  */
 @Suppress("UNCHECKED_CAST")
 class PermissionHelper(activity: Activity, permissions: Array<String>, requestCode: Int) {

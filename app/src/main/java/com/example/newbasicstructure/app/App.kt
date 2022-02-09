@@ -9,7 +9,7 @@ import dagger.hilt.android.HiltAndroidApp
 
 
 /**
- * Created by Sajid.
+ * Created by Jeetesh surana.
  */
 @HiltAndroidApp
 class App : Application() {
