@@ -19,7 +19,6 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         lifecycleScope.launch {
-            delay(2000)
             homeViewModel.getData()
         }
     }

@@ -3,6 +3,7 @@ package com.example.newbasicstructure.repository
 import android.content.Context
 import android.util.Log
 import com.example.newbasicstructure.data.remote.model.response.PostResponse
+import com.example.newbasicstructure.data.remote.model.response.PostResponseItem
 import com.example.newbasicstructure.network.ApiRestService
 import com.example.newbasicstructure.network.SafeApiRequest
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -16,7 +17,7 @@ class DemoRepository @Inject constructor(
     private val api: ApiRestService
 ) : SafeApiRequest(context) {
 
-    suspend fun getWeather(): PostResponse {
+    suspend fun getWeather(): List<PostResponseItem> {
         return apiRequest { api.getWeather() }
     }
 }

@@ -1,22 +1,20 @@
 package com.example.newbasicstructure.network
 
 import android.content.Context
-import android.util.Log
-import com.example.newbasicstructure.R
 import com.example.newbasicstructure.data.remote.model.response.PostResponse
+import com.example.newbasicstructure.data.remote.model.response.PostResponseItem
 import com.example.newbasicstructure.network.interceptor.HeaderInterceptor
 import com.example.newbasicstructure.network.interceptor.NetworkInterceptor
 import com.example.newbasicstructure.util.Constant.baseURL
-import com.example.newbasicstructure.util.PreferenceProvider
-import com.google.gson.Gson
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.Cache
 import okhttp3.OkHttpClient
-import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import java.io.File
 import java.util.concurrent.TimeUnit
@@ -29,7 +27,7 @@ import java.util.concurrent.TimeUnit
 interface ApiRestService {
 
     @GET("posts")
-    suspend fun getWeather(): Response<PostResponse>
+    suspend fun getWeather(): Response<List<PostResponseItem>>
 
 
     companion object {
@@ -63,12 +61,15 @@ interface ApiRestService {
                 .addInterceptor(logging)
                 .addInterceptor(headerInterceptor)
 
+            val moshi = Moshi.Builder()
+                .add(KotlinJsonAdapterFactory())
+                .build()
 
             return Retrofit.Builder()
                 .baseUrl(baseURL)
                 .client(okHttpBuilder.build())
+                .addConverterFactory(MoshiConverterFactory.create(moshi).asLenient())
                 .addCallAdapterFactory(CoroutineCallAdapterFactory())
-                .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(ApiRestService::class.java)
         }

@@ -1,6 +1,6 @@
 package com.example.newbasicstructure.data.remote.model.response
 
-data class PostRespnoseItem(
+data class PostResponseItem(
     val body: String,
     val id: Int,
     val title: String,
