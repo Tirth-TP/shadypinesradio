@@ -1,15 +1,10 @@
 package com.example.newbasicstructure.viewmodel
 
-import android.app.Application
 import android.util.Log
 import com.example.newbasicstructure.core.uI.BaseViewModel
 import com.example.newbasicstructure.network.ApiException
-import com.example.newbasicstructure.network.ApiRestService
-import com.example.newbasicstructure.network.interceptor.HeaderInterceptor
-import com.example.newbasicstructure.network.interceptor.NetworkInterceptor
 import com.example.newbasicstructure.repository.DemoRepository
-import com.example.newbasicstructure.util.DeviceUtil
-import com.example.newbasicstructure.util.PreferenceProvider
+import com.example.newbasicstructure.util.extensionFunction.convertIntoErrorObjet
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -30,7 +25,7 @@ class DemoViewModel @Inject constructor(
             val data = repository.getWeather()
             Log.e("TAG", "getData() data--> $data")
         } catch (e: ApiException) {
-            e.message
+            mError.postValue(convertIntoErrorObjet(e))
         }
     }
 }

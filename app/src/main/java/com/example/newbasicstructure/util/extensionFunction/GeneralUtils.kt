@@ -17,6 +17,8 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
+import com.example.newbasicstructure.data.remote.model.ErrorModel
+import com.example.newbasicstructure.network.ApiException
 
 /**
  * Created by Jeetesh surana.
@@ -341,4 +343,8 @@ fun View.showKeyBoard() {
         InputMethodManager.HIDE_IMPLICIT_ONLY,
         0
     )
+}
+
+fun convertIntoErrorObjet(e: ApiException): ErrorModel? {
+    return e.message?.let { ErrorModel(it, e.errno, e.code) }
 }
