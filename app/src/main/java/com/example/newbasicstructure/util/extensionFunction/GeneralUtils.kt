@@ -1,8 +1,10 @@
 package com.example.newbasicstructure.util.extensionFunction
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.Build
@@ -14,6 +16,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.annotation.IdRes
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
@@ -348,3 +351,84 @@ fun View.showKeyBoard() {
 fun convertIntoErrorObjet(e: ApiException): ErrorModel? {
     return e.message?.let { ErrorModel(it, e.errno, e.code) }
 }
+
+
+/**
+ * start Handle common Permission
+ * checkPermission tell permission allowed or not
+ */
+enum class CheckPermission { AUDIO, CAMERA, STORAGE, AUDIO_CAMERA_STORAGE }
+
+val cameraWithStoragePermission = arrayOf(
+    Manifest.permission.CAMERA,
+    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+    Manifest.permission.READ_EXTERNAL_STORAGE
+)
+
+val storagePermission = arrayOf(
+    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+    Manifest.permission.READ_EXTERNAL_STORAGE
+)
+val audioPermission = arrayOf(
+    Manifest.permission.RECORD_AUDIO,
+    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+    Manifest.permission.READ_EXTERNAL_STORAGE
+)
+
+val audioCameraStoragePermission = arrayOf(
+    Manifest.permission.RECORD_AUDIO,
+    Manifest.permission.CAMERA,
+    Manifest.permission.WRITE_EXTERNAL_STORAGE
+)
+
+fun checkPermission(
+    context: Context,
+    checkPermission: CheckPermission = CheckPermission.CAMERA
+): Boolean {
+    return when (checkPermission) {
+        CheckPermission.CAMERA -> {
+            hasPermissions(
+                context,
+                cameraWithStoragePermission
+            )
+        }
+        CheckPermission.AUDIO -> {
+            hasPermissions(
+                context,
+                audioPermission
+            )
+        }
+        CheckPermission.AUDIO_CAMERA_STORAGE -> {
+            hasPermissions(
+                context,
+                audioCameraStoragePermission
+            )
+        }
+        else -> {
+            hasPermissions(
+                context,
+                storagePermission
+            )
+        }
+    }
+}
+
+fun hasPermissions(
+    context: Context?,
+    permissions: Array<String>?
+): Boolean {
+    if (context != null && !permissions.isNullOrEmpty()) {
+        for (permission in permissions) {
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    permission
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return false
+            }
+        }
+    }
+    return true
+}
+
+// [END] Handle common Permission
