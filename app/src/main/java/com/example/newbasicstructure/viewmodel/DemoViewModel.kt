@@ -1,6 +1,5 @@
 package com.example.newbasicstructure.viewmodel
 
-import android.util.Log
 import com.example.newbasicstructure.core.uI.BaseViewModel
 import com.example.newbasicstructure.network.ApiException
 import com.example.newbasicstructure.repository.DemoRepository
@@ -16,14 +15,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DemoViewModel @Inject constructor(
-    private val repository: DemoRepository/*,
-    private val context: Application*/
+    private val repository: DemoRepository
 ) : BaseViewModel() {
 
     suspend fun getData() = withContext(Dispatchers.Main) {
         try {
-            val data = repository.getWeather()
-            Log.e("TAG", "getData() data--> $data")
+            repository.getWeather()
         } catch (e: ApiException) {
             mError.postValue(convertIntoErrorObjet(e))
         }
