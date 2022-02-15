@@ -18,7 +18,7 @@ class DemoViewModel @Inject constructor(
     private val repository: DemoRepository
 ) : BaseViewModel() {
 
-    suspend fun getData() = withContext(Dispatchers.Main) {
+    suspend fun getData() = withContext(Dispatchers.IO) {
         try {
             repository.getWeather()
         } catch (e: ApiException) {
