@@ -17,6 +17,5 @@ class IntroActivity : BaseActivity() {
         startActivity(intent)
         finish()
 
-        var h ="hello"
     }
 }
