@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NewBasicStructure</string>
+    <string name="app_name">ShadypinesRadio</string>
     <string name="base_url">https://jsonplaceholder.typicode.com/</string>
 
     <string name="permission_denied_by_system">Permission denied by system</string>
